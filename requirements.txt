@@ -37,4 +37,5 @@ tensorflowonspark
 jieba
 nltk
 jupyterlab
+turtle
 h2o
