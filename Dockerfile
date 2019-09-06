@@ -27,6 +27,7 @@ RUN apt-get update && \
 RUN mkdir -p ${VENV_DIR} && chown -R ${NB_USER} ${VENV_DIR}
 
 USER ${NB_USER}
+
 RUN python3 -m venv ${VENV_DIR} && \
     # Explicitly install a new enough version of pip
     pip3 install pip==19.2.1 && \
@@ -36,6 +37,10 @@ RUN python3 -m venv ${VENV_DIR} && \
     jupyter nbextension install    --sys-prefix --py nbrsessionproxy && \
     jupyter nbextension enable     --sys-prefix --py nbrsessionproxy
 
+RUN R -e "install.packages('tidyverse',dependencies=TRUE, repos='http://cran.rstudio.com/')"
+RUN R -e "install.packages('rmarkdown',dependencies=TRUE, repos='http://cran.rstudio.com/')"
+RUN R -e "install.packages('httr',dependencies=TRUE, repos='http://cran.rstudio.com/')" 
+RUN R -e "install.packages('shinydashboard',dependencies=TRUE, repos='http://cran.rstudio.com/')" 
 
 RUN R --quiet -e "devtools::install_github('IRkernel/IRkernel')" && \
     R --quiet -e "IRkernel::installspec(prefix='${VENV_DIR}')"
